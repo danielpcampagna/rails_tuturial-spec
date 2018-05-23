@@ -4,7 +4,7 @@ describe Phone do
   
   # Testing validations
 
-  it 'does not allow duplicate phone number per contact' do
+  it "does not allow duplicate phone number per contact" do
     contact = create(:contact)
     create(:home_phone,
       contact: contact,
