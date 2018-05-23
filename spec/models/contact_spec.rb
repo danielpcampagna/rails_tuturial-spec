@@ -15,7 +15,7 @@ describe Contact do
   # Testing validations
 
   it "is valid with a firstname, lastname and email" do
-    contact = Contact.new(
+    contact = build(:contact,
       firstname: 'Aaron',
       lastname: 'Sumner',
       email: 'tester@exemple.com')
