@@ -2,6 +2,16 @@ require 'rails_helper'
 
 describe Contact do
 
+  # Testing factory
+
+  it "has a valid factory" do
+    expect(build(:contact)).to be_valid
+  end
+
+  it "has three phone numbers" do
+    expect(create(:contact).phones.count).to eq 3
+  end
+
   # Testing validations
 
   it "is valid with a firstname, lastname and email" do
@@ -12,25 +22,23 @@ describe Contact do
     expect(contact).to be_valid
   end
   it "is invalid without a firstname" do
-    contact = Contact.new(firstname: nil)
+    contact = build(:contact, firstname: nil)
     contact.valid?
     expect(contact.errors[:firstname]).to include("can't be blank")
   end
   it "is invalid without a lastname" do
-    contact = Contact.new(lastname: nil)
+    contact = build(:contact, lastname: nil)
     contact.valid?
     expect(contact.errors[:lastname]).to include("can't be blank")
   end
   it "is invalid without an email address" do
-    contact = Contact.new(email: nil)
+    contact = build(:contact, email: nil)
     contact.valid?
     expect(contact.errors[:email]).to include("can't be blank")
   end
   it "is invalid with a duplicate email address" do
-    Contact.create(firstname: 'Joe', lastname: 'Tester',
-      email: 'tester@example.com')
-    contact = Contact.new(firstname: 'Jane', lastname: 'Tester',
-      email: 'tester@example.com')
+    create(:contact, email: 'aaron@example.com')
+    contact = build(:contact, email: 'aaron@example.com')
     contact.valid?
     expect(contact.errors[:email]).to include("has already been taken")
   end
@@ -38,11 +46,11 @@ describe Contact do
   # Testing instance methods
 
   it "returns a contact's full name as a string" do
-    contact = Contact.new(
-      firstname: 'John',
-      lastname: 'Doe',
-      email: 'johndoe@example.com')
-    expect(contact.name).to eq 'John Doe'
+    contact = build(:contact,
+      firstname: 'Jane',
+      lastname: 'Smith'
+    )
+    expect(contact.name).to eq 'Jane Smith'
   end
 
   # Testing class methods and scopes
