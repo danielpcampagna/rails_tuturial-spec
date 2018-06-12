@@ -18,6 +18,7 @@ describe Phone do
     mobile_phone.valid?
     expect(mobile_phone.errors[:phone]).to include('has already been taken')
   end
+  
   it "allows two contacts to share a phone number" do
     create(:home_phone,
       phone: '785-555-1234'

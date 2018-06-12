@@ -1,4 +1,4 @@
-class Contact < ActiveRecord::Base
+class Contact < ApplicationModel
   has_many :phones
   accepts_nested_attributes_for :phones
 
@@ -14,4 +14,13 @@ class Contact < ActiveRecord::Base
   def self.by_letter(letter)
     where("lastname LIKE ?", "#{letter}%").order(:lastname)
   end
+
+  # def self.to_csv
+  #   CSV.generate do |csv|
+  #     csv << column_names
+  #     all.each do |model|
+  #       csv << model.attributes.values_at(*column_names)
+  #     end
+  #   end
+  # end
 end

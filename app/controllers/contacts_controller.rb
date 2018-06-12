@@ -1,6 +1,6 @@
 class ContactsController < ApplicationController
-  before_action :authenticate, except: [:index, :show]
-  before_action :set_contact, only: [:show, :edit, :update, :destroy]
+#  before_action :authenticate, except: [:index, :show]
+  before_action :set_contact, only: [:show, :edit, :update, :destroy, :hidden_contact]
 
   # GET /contacts
   # GET /contacts.json
@@ -9,6 +9,15 @@ class ContactsController < ApplicationController
       @contacts = Contact.by_letter(params[:letter])
     else
       @contacts = Contact.order('lastname, firstname')
+    end
+    
+    respond_to do |format|
+      format.html
+      format.csv  do
+        send_data Contact.to_csv(@contacts),
+        type: 'text/csv; charset=iso-8859-1; header=present',
+        disposition: 'attachment; filename=contacts.csv'
+      end
     end
   end
 
@@ -51,6 +60,20 @@ class ContactsController < ApplicationController
     respond_to do |format|
       if @contact.update(contact_params)
         format.html { redirect_to @contact, notice: 'Contact was successfully updated.' }
+        format.json { render :show, status: :ok, location: @contact }
+      else
+        format.html { render :edit }
+        format.json { render json: @contact.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /hidden_contact/1
+  # PATCH/PUT /hidden_contact/1.json
+  def hidden_contact
+    respond_to do |format|
+      if @contact.update({hidden: true})
+        format.html { redirect_to @contact, notice: 'Contact was successfully maked as hidden.' }
         format.json { render :show, status: :ok, location: @contact }
       else
         format.html { render :edit }
