@@ -1,6 +1,7 @@
 class ContactsController < ApplicationController
-#  before_action :authenticate, except: [:index, :show]
+  before_action :authenticate, except: [:index, :show]
   before_action :set_contact, only: [:show, :edit, :update, :destroy, :hidden_contact]
+  before_action :can_administer?, except: [:index, :show]
 
   # GET /contacts
   # GET /contacts.json
